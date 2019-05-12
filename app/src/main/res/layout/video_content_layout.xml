@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:background="#000"
+        android:layout_height="match_parent"
+        tools:context=".fragments.FollowingVideosFragment">
+
+
+    <com.halilibo.bettervideoplayer.BetterVideoPlayer
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/contentVideoView"
+            app:bvp_autoFullscreen="true"
+            app:bvp_pauseDrawable="@drawable/bvp_action_pause"
+            app:bvp_playDrawable="@drawable/bvp_action_play"
+            app:bvp_loadingStyle="ChasingDots"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <View android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="#19000000"
+          tools:layout_editor_absoluteX="0dp"
+          tools:layout_editor_absoluteY="0dp" android:id="@+id/view"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              tools:text="\@judeosbertk"
+              android:fontFamily="@font/open_sans_semibold"
+              android:textColor="#fff"
+              android:textSize="14sp"
+              android:id="@+id/postAuthorName"
+              app:layout_constraintStart_toStartOf="parent"
+              android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+              app:layout_constraintBottom_toTopOf="@+id/postDescription"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="17dp"
+              android:textSize="12sp"
+              android:textColor="#fff"
+              android:fontFamily="@font/open_sans"
+              tools:text="This is a sample video description"
+              android:layout_marginStart="8dp"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
+              android:layout_marginEnd="120dp" android:layout_marginBottom="?attr/actionBarSize"
+              app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/postDescription"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:progressTint="@color/greyeee"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="@+id/view"/>
+
+    <ImageView android:layout_width="60dp" android:layout_height="60dp"
+
+               app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+               app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+               android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+               android:id="@+id/btnPlay"
+               android:src="@drawable/bvp_action_play"
+
+               android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
