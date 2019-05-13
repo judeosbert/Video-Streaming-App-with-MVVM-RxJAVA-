@@ -7,5 +7,7 @@ import retrofit2.http.Query
 
 interface RedditService {
     @GET("hot.json")
-    fun getTopPosts(@Query("after") after:String?):Observable<RedditTopPostsModal>
+    fun getTopPosts(@Query("after") after:String?
+        ,@Query("limit") limit:Int = 5
+    ):Observable<RedditTopPostsModal>
 }

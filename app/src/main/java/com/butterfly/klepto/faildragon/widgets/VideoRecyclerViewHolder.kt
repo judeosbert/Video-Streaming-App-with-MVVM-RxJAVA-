@@ -1,7 +1,6 @@
 package com.butterfly.klepto.faildragon.widgets
 
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -9,21 +8,18 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.butterfly.klepto.faildragon.R
-import com.butterfly.klepto.faildragon.extensions.path
 import com.butterfly.klepto.faildragon.modal.Feed
 import com.butterfly.klepto.faildragon.utils.getCacheFile
-import com.github.ybq.android.spinkit.sprite.Sprite
-import com.github.ybq.android.spinkit.style.ChasingDots
+import com.butterfly.klepto.faildragon.utils.isFileInCache
 import com.halilibo.bettervideoplayer.BetterVideoPlayer
 
-open class VideoRecyclerViewHolder constructor(val view: View): RecyclerView.ViewHolder(view) {
+open class VideoRecyclerViewHolder constructor(private val view: View): RecyclerView.ViewHolder(view) {
     val videoPlayer: BetterVideoPlayer = view.findViewById(R.id.contentVideoView)
-    val postOwner  = view.findViewById(R.id.postAuthorName) as TextView
-    val postDescription = view.findViewById(R.id.postDescription) as TextView
-    val progressBar = view.findViewById(R.id.progressBar) as ProgressBar
-    val playButton = view.findViewById(R.id.btnPlay) as ImageView
-    lateinit var mFeed: Feed
-    fun playVideo() = videoPlayer.start()
+    private val postOwner  = view.findViewById(R.id.postAuthorName) as TextView
+    private val postDescription = view.findViewById(R.id.postDescription) as TextView
+    private val progressBar = view.findViewById(R.id.progressBar) as ProgressBar
+    private val playButton = view.findViewById(R.id.btnPlay) as ImageView
+    private val mCallBack: VideoCallBack = VideoCallBack(this)
     init {
         this.setIsRecyclable(false)
         videoPlayer.disableControls()
@@ -37,18 +33,20 @@ open class VideoRecyclerViewHolder constructor(val view: View): RecyclerView.Vie
     }
 
     fun initVideoView(feed: Feed) {
-        mFeed = feed
+        videoPlayer.setCallback(mCallBack)
+        videoPlayer.setProgressCallback(mCallBack)
         postOwner.text = "@${feed.postOwner}"
         postDescription.text = feed.postTitle
-        if(feed.videoCached){
+        if(isFileInCache(feed.videoUrl?:"")){
             videoPlayer.setSource(
-                Uri.fromFile(getCacheFile(view.context,feed.videoUrl?:""))
+                Uri.fromFile(getCacheFile(feed.videoUrl?:""))
             )
         }else{
             videoPlayer.setSource(Uri.parse(feed.videoUrl))
         }
 
         videoPlayer.setAutoPlay(true)
+        playButton.visibility = View.GONE
 
 }
 
@@ -62,10 +60,6 @@ open class VideoRecyclerViewHolder constructor(val view: View): RecyclerView.Vie
         playButton.visibility = View.GONE
         videoPlayer.start()
     }
-
-        fun isPlaying():Boolean{
-            return videoPlayer.isPlaying
-        }
 
         fun setProgress(progress:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

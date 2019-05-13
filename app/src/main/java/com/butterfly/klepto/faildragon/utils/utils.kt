@@ -1,24 +1,33 @@
 package com.butterfly.klepto.faildragon.utils
 
-import android.content.Context
-import android.content.res.Resources
+import android.support.v7.util.DiffUtil
+import com.butterfly.klepto.faildragon.BaseApplication
 import com.butterfly.klepto.faildragon.extensions.path
+import com.butterfly.klepto.faildragon.modal.Feed
 import java.io.File
 
-fun dpToPx(dp: Int): Float {
-    return (dp * Resources.getSystem().getDisplayMetrics().density)
-}
 
 fun getVideoName(url:String):String{
     return url.replace("https://clips.twitch.tv/","")
 
 }
-fun isFileInCache(context: Context, fileName: String):Boolean{
-    if(File(context.cacheDir,fileName.path()).exists()){
+fun isFileInCache(fileName: String):Boolean{
+    if(File(BaseApplication.applicationContext().cacheDir,fileName.path()).exists()){
         return true
     }
     return false
 }
-fun getCacheFile(context: Context,fileName: String):File{
-    return File(context.cacheDir,fileName.path())
+fun getCacheFile(fileName: String):File{
+    return File(BaseApplication.applicationContext().cacheDir,fileName.path())
+}
+
+class DiffUtilCallBack:DiffUtil.ItemCallback<Feed>(){
+    override fun areItemsTheSame(old: Feed, new: Feed): Boolean {
+        return old.id.equals(new.id)
+    }
+
+    override fun areContentsTheSame(old: Feed, new: Feed): Boolean {
+        return old == new
+    }
+
 }

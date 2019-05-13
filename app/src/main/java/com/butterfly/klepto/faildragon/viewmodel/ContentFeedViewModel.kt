@@ -1,31 +1,26 @@
 package com.butterfly.klepto.faildragon.viewmodel
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
+import android.arch.paging.ItemKeyedDataSource
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import com.butterfly.klepto.faildragon.modal.Feed
-import com.butterfly.klepto.faildragon.repository.ContentFeedRespository
+import com.butterfly.klepto.faildragon.repository.FeedDataSourceFactory
 
-class ContentFeedViewModel (private val repository: ContentFeedRespository):ViewModel(){
+class ContentFeedViewModel:ViewModel(){
+    var feedPagedList:LiveData<PagedList<Feed>>
+    var liveDataSource:LiveData<ItemKeyedDataSource<String,Feed>>
 
-    var feed: MediatorLiveData<Collection<Feed>> = MediatorLiveData()
-    var repositoryFetchFunction = repository.getTopPosts()
-    fun getTopPosts(){
-        repository.getTopPosts()
-    }
-    var load:MutableLiveData<Boolean> = MutableLiveData()
     init {
-        //load.value = true
-        feed.addSource(repositoryFetchFunction){
-//
-            feed.value = it
+        val feedDataSourceFactory = FeedDataSourceFactory()
+        liveDataSource = feedDataSourceFactory.getFeedLiveDataSource()
 
-        }
-    }
-
-    fun resetLoadFlag(){
-        load.value = false
+        val pagedListConfig =  (PagedList.Config.Builder())
+                                .setPrefetchDistance(10)
+                                .setPageSize(50)
+                                .setEnablePlaceholders(false).build()
+        feedPagedList = LivePagedListBuilder(feedDataSourceFactory,pagedListConfig).build()
     }
 
 }

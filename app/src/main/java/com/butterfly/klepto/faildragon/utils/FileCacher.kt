@@ -3,6 +3,7 @@ package com.butterfly.klepto.faildragon.utils
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
+import com.butterfly.klepto.faildragon.BaseApplication
 import com.butterfly.klepto.faildragon.apimanagers.FileCacheApiManager
 import com.butterfly.klepto.faildragon.extensions.path
 import com.butterfly.klepto.faildragon.modal.Feed
@@ -17,23 +18,13 @@ import java.lang.Exception
 
 
 class FileCacher:KoinComponent {
-    val fileCacheApiManager by inject<FileCacheApiManager>()
-    val filesInQue:Set<String> = setOf()
-    @Throws(Exception::class)
-    fun cacheFile(
-        context: Context,
-        data: ArrayList<Feed>,
-        currentPosition: Int
-    ) {
-        for ( i in currentPosition..currentPosition + 2){
-            val url = data[i].videoUrl!!
-            downloadFile(url,context)
+    private val fileCacheApiManager by inject<FileCacheApiManager>()
+    private val filesInQue:Set<String> = setOf()
 
-        }
-    }
 
-    fun downloadFile(url:String,context: Context){
-        if(!isFileInCache(context, url))
+    private fun downloadFile(url:String){
+
+        if(!isFileInCache(url))
         if (!filesInQue.contains(url.path())) {
             filesInQue.plus(url.path())
             fileCacheApiManager.service.cacheFile(url).enqueue(object : Callback<ResponseBody> {
@@ -46,7 +37,7 @@ class FileCacher:KoinComponent {
                         object : AsyncTask<Void, Void, Void>() {
                             override fun doInBackground(vararg voids: Void): Void? {
                                 val writtenToDisk =
-                                    writeResponseBodyToDisk(response.body()!!, context, url)
+                                    writeResponseBodyToDisk(response.body()!!, BaseApplication.applicationContext(), url)
 
                                 Log.d("JUDE", "file download was a success? $writtenToDisk")
                                 return null
@@ -59,10 +50,6 @@ class FileCacher:KoinComponent {
 
 
         }
-    }
-    @Throws(Exception::class)
-    fun cacheFile(context: Context,url:String){
-        downloadFile(url,context)
     }
 
     private fun writeResponseBodyToDisk(body: ResponseBody,context: Context,url:String): Boolean {
@@ -110,6 +97,13 @@ class FileCacher:KoinComponent {
             return false
         }
 
+
+    }
+    @Throws(Exception::class)
+    fun cacheFile(feeds: MutableList<Feed>?) {
+        feeds?.forEach {feed->
+            downloadFile(feed.videoUrl?:"")
+        }
 
     }
 

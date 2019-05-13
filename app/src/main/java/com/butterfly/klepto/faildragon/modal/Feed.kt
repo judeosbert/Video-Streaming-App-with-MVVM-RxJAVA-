@@ -5,9 +5,8 @@ data class Feed (
     val postOwner:String?="",
     val postTitle:String?="",
     val upVotes:Int?=0,
-    val isError:Boolean = false
+    val id:String?="",
+    val isError:Boolean = false,
+    val afterKey:String?=""
 
-) {
-
-    var videoCached: Boolean = false
-}
+)

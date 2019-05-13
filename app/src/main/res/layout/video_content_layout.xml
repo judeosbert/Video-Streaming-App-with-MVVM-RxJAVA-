@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:background="#000"
         android:layout_height="match_parent"
-        tools:context=".fragments.FollowingVideosFragment">
+        tools:context=".fragments.ForYouFragment">
 
 
     <com.halilibo.bettervideoplayer.BetterVideoPlayer
