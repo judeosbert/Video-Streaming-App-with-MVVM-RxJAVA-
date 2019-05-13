@@ -3,6 +3,7 @@
 An Android native mobile app copies TikTok ( https://www.tiktok.com ) mechanics and use https://livestreamfails.com videos as a source.
 Since the assignment statement only asks to use the videos from livestreamfails.com to be used as source, I found an alternative way to get the video links.
 Looking at the videos in the site, the inital approach would be to scrap the site using some html parser, but then the issue of pagination will block the approach and wouldnt we that efficient too. The site itself dosen't provide any APIs. Looking at the reddit page https://reddit.com/r/LivestreamFail/ the same videos appear in the site with the exact number of votes from reddit. Essentialy the site is using reddit as their data source, which means all posts are available in reddit, which provides a clean api for pagination and json results.
+I have chosen the minimum API Level to be 21 since it provides approximately 85% device coverage. 
 
 The problem dosen't end there. The links in the post are links to webpages that renders the video inside a page and provides links only to embed the video, which is not what we are looking for. Searching around and looking at twitch leecher and similar projects I found that `https://clips.twitch.tv/api/v2/clips/{$videoname}/status`
 provides links of different quality in json format. We get `$videoname` from the post in reddit.
